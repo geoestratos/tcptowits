@@ -33,7 +33,7 @@ class HomeApp(tk.Frame):
             else:
                 self.sensor_info.insert(tk.END, f"{sensor_data}\n")
 
-        self.after(2000, self.update_sensor_info)
+        self.after(1000, self.update_sensor_info)
 
 if __name__ == '__main__':
     root = tk.Tk()
