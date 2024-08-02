@@ -35,3 +35,9 @@ if __name__ == '__main__':
     main_app = MainApp(root)
     main_app.pack(fill='both', expand=True)
     root.mainloop()
+
+
+#preguntale a josafat
+#la idea sería proponer dos software una visualización remota web
+#Control local escritorio
+#divir 2 presentación unicamente mostrar la visualización
