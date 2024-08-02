@@ -12,7 +12,7 @@ class SensorManager:
         if (host, port) not in self.connections:
             try:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                sock.settimeout(0.5)
+                #sock.settimeout(0.5)
                 sock.connect((host, port))
                 self.connections[(host, port)] = sock
                 logging.info(f"Conexión establecida con el sensor {host}:{port}")
@@ -28,6 +28,7 @@ class SensorManager:
         try:
             sock.sendall(b"REQUEST DATA")
             response = sock.recv(1024)
+            print( response.decode() )
             return response.decode()
         except socket.timeout:
             logging.error(f"Timeout al intentar conectar con el sensor {host}:{port}")
