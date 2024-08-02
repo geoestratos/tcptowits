@@ -29,7 +29,7 @@ def add_sensor(ip, port, filename="sensors.json"):
 def request_sensor_data(host, port):
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            sock.settimeout(.1)
+            #sock.settimeout(.2)
             sock.connect((host, port))
             sock.sendall(b"REQUEST DATA")
             response = sock.recv(1024)

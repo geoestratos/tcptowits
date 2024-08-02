@@ -41,3 +41,4 @@ if __name__ == '__main__':
 #la idea sería proponer dos software una visualización remota web
 #Control local escritorio
 #divir 2 presentación unicamente mostrar la visualización
+
