@@ -38,3 +38,19 @@ def request_sensor_data(host, port):
         return f"Timeout al intentar conectar con el sensor {host}"
     except Exception as e:
         return f"Error al conectar o recibir datos del sensor {host}: {str(e)}"
+
+def generate_wits_frame(data):
+
+    now = datetime.datetime.now()
+    año, mes, dia = now.strftime("%Y"), now.strftime("%m"), now.strftime("%d")
+    hora, minuto, segundo = now.strftime("%H"), now.strftime("%M"), now.strftime("%S")
+
+    fecha_cadena = f"{1313}{año[2:]}{mes}{dia}"
+    hora_cadena = f"{1314}{hora}{minuto}{segundo}"
+    nombre_pozo = "wellname"
+    output = f"&&\n{fecha_cadena}\n{hora_cadena}\n{1315}{nombre_pozo}\n"
+    for item in data:
+        output += f"{item['WITSID']}{item['value']}\n"
+
+    output += "!!"
+    return output

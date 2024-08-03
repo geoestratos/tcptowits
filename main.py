@@ -1,7 +1,7 @@
 import tkinter as tk
 from UI.HomeApp import HomeApp
 from UI.TableApp import TableApp
-
+from UI.WitsConfig import WitsConfig
 class MainApp(tk.Frame):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -19,6 +19,8 @@ class MainApp(tk.Frame):
         # Configuración del menú
         config_menu = tk.Menu(menubar, tearoff=0)
         config_menu.add_command(label="Editar Sensores", command=self.open_table_app)
+        config_menu.add_command(label="WITS", command=self.open_wits_config)  # Nueva opción de menú
+
         menubar.add_cascade(label="Configuración", menu=config_menu)
 
     def create_home(self):
@@ -28,6 +30,10 @@ class MainApp(tk.Frame):
     def open_table_app(self):
         self.new_window = tk.Toplevel(self.main)
         self.app = TableApp(self.new_window)
+
+    def open_wits_config(self):
+        self.new_window = tk.Toplevel(self.main)
+        self.app = WitsConfig(self.new_window)
 
 
 if __name__ == '__main__':
