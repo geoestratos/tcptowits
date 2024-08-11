@@ -1,11 +1,11 @@
 import tkinter as tk
-from tkinter import ttk
 import threading
-from Functions.utils import load_sensors,generate_wits_frame
+from Functions.utils import load_sensors, generate_wits_frame
 from Functions.sensor_manager import SensorManager
+from Functions.tcp_server import TCPServer
 import datetime
 import logging
-import json
+
 # Configuración del logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -20,6 +20,7 @@ class HomeApp(tk.Frame):
         super().__init__(parent)
         self.main = self.master
         self.sensor_manager = SensorManager()  # Instancia del SensorManager
+        self.tcp_server = TCPServer()  # Iniciar el servidor TCP
 
         self.create_widgets()
         self.update_sensor_info()
@@ -50,7 +51,6 @@ class HomeApp(tk.Frame):
             wits_id = sensor["WITSID"]
             try:
                 sensor_data = self.sensor_manager.request_data(host, port)
-
                 sensor_data_list.append({
                     "WITSID": wits_id,
                     "value": sensor_data["counter"]
@@ -61,19 +61,20 @@ class HomeApp(tk.Frame):
                     "WITSID": wits_id,
                     "value": 440.666
                 })
+
         trama_wits = generate_wits_frame(sensor_data_list)
+        self.tcp_server.send_to_all(trama_wits)
         self.main.after(0, self.update_sensor_info_display, trama_wits)
 
-    def update_sensor_info_display(self, sensor_data_list):
+    def update_sensor_info_display(self, trama_wits):
         self.sensor_info.delete(1.0, tk.END)
-        for data in sensor_data_list:
-            self.sensor_info.insert(tk.END, data)
-
+        self.sensor_info.insert(tk.END, trama_wits)
         self.after(2000, self.update_sensor_info)  # Actualiza la información cada 2 segundos
 
     def on_closing(self):
         try:
             self.sensor_manager.close_all()
+            self.tcp_server.stop()  # Detener el servidor TCP
         except Exception as e:
             logging.error(f"Error al cerrar las conexiones: {e}")
         self.main.destroy()
@@ -88,4 +89,3 @@ if __name__ == '__main__':
         root.mainloop()
     except Exception as e:
         logging.error(f"Error al iniciar la aplicación: {e}")
-
